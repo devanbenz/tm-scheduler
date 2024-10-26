@@ -1,3 +1,11 @@
 syntax = "proto3";
 
-package master;
+service MasterNode {
+  rpc HealthCheck(EmptyRequest) returns (HealthCheckResponse) {}
+}
+
+message EmptyRequest {}
+
+message HealthCheckResponse {
+  string message = 1;
+}
