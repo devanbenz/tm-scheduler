@@ -1,8 +1,15 @@
-//
-// Created by Devan on 10/25/24.
-//
+#pragma once
 
-#ifndef TMSCHEDULER_WORKER_H
-#define TMSCHEDULER_WORKER_H
+#include "protos/api/v1/node.grpc.pb.h"
 
-#endif //TMSCHEDULER_WORKER_H
+class WorkerNode final : public Node::Service {
+public:
+    grpc::Status HealthCheck(::grpc::ServerContext *context, const ::EmptyRequest *request,
+                             ::HealthCheckResponse *response) override {
+
+        response->set_message("I'm okay!");
+
+        return ::grpc::Status::OK;
+    }
+
+};

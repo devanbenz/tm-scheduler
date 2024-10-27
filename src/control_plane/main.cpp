@@ -1,8 +1,8 @@
-#include "../include/api_server.h"
+#include "../include/grpc_client.h"
+#include <iostream>
 
 int main() {
-    crow::SimpleApp app;
-    auto server = ApiServer(app);
-    server.start(8080);
-    return 0;
+    std::string rs = SendHealthCheck("0.0.0.0:50051");
+
+    std::cout << rs << std::endl;
 }

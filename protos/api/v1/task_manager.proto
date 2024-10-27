@@ -1,0 +1,22 @@
+syntax = "proto3";
+
+import "protos/api/v1/common.proto";
+
+service TaskManagerService {
+  rpc HealthCheck(EmptyRequest) returns (HealthCheckResponse) {}
+  rpc SendTask(SendTaskRequest) returns (SendTaskResponse) {}
+  rpc GetNextTaskFromScheduler(EmptyRequest) returns (GetNextTaskFromSchedulerResponse) {}
+}
+
+message SendTaskRequest {
+  string relation = 1;
+  string process_script_location = 2;
+}
+
+message SendTaskResponse {
+  int32 task_id = 1;
+}
+
+message GetNextTaskFromSchedulerResponse {
+  int32 task_id = 1;
+}

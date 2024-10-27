@@ -1,9 +1,5 @@
 syntax = "proto3";
 
-service MasterNode {
-  rpc HealthCheck(EmptyRequest) returns (HealthCheckResponse) {}
-}
-
 message EmptyRequest {}
 
 message HealthCheckResponse {
