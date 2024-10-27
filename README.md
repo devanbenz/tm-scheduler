@@ -1,6 +1,8 @@
 # TM Scheduler
 *The Tadashi-Mizu distributed task scheduler*
 
+*Code is still 100% a work in progress and is mostly scratch code wiring things up (I don't really know C++ sorry :P)*
+
 ## Communication Architecture
 
 ```
