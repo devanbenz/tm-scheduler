@@ -1,6 +1,8 @@
 # TM Scheduler
 *The Tadashi-Mizu distributed task scheduler*
 
+*ONLY TESTED ON MACOS ARM64*
+
 *Code is still 100% a work in progress and is mostly scratch code wiring things up (I don't really know C++ sorry :P)*
 
 ## Communication Architecture
@@ -63,6 +65,9 @@ tm.NewSession("localhost:8080")
 tm.RegisterWorker("localhost:50051")
 tm.RegisterWorker("localhost:50052")
 tm.RegisterWorker("localhost:50053")
+
+#Register an s3 object store
+tm.RegisterObjectStore("s3://test-bucket")
 
 # TODO: implement some ideas for submitting tasks
 ```
