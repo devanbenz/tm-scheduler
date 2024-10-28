@@ -2,4 +2,4 @@
 
 #include "string"
 
-std::string SendHealthCheck(const std::string& addr);
+::grpc::Status SendHealthCheck(const std::string& addr);

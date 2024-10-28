@@ -1,15 +1,6 @@
 #include "../include/rr_scheduler.h"
 
 void RoundRobinScheduler::ScheduleTasks() {
-    std::string val;
-    rocksdb::Status status;
-
-    status = db_->Put(rocksdb::WriteOptions(), "test", "check!");
-    assert(status.ok());
-
-    status = db_->Get(rocksdb::ReadOptions(), "test", &val);
-    assert(status.ok());
-    std::cout << "Got value: " << val << std::endl;
 }
 
 void RoundRobinScheduler::ProcessTask() {

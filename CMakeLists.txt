@@ -16,7 +16,15 @@ FetchContent_Declare(
         GIT_TAG 94a011b9f7c0a991e5382927a2dbe5a7d9a056b8
 )
 FetchContent_MakeAvailable(Crow)
+include(FetchContent)
+FetchContent_Declare(cpr
+        GIT_REPOSITORY https://github.com/libcpr/cpr.git
+        GIT_TAG bb01c8db702fb41e5497aee9c0559ddf4bf13749
+)
+FetchContent_MakeAvailable(cpr)
 
+FetchContent_Declare(json URL https://github.com/nlohmann/json/releases/download/v3.11.3/json.tar.xz)
+FetchContent_MakeAvailable(json)
 
 add_library(protolib protos/api/v1/node.proto protos/api/v1/task_manager.proto protos/api/v1/common.proto)
 
@@ -39,6 +47,12 @@ target_link_libraries(tm_scheduler
         Crow::Crow
         RocksDB::rocksdb
 )
+
+add_library(metadata_store
+        src/include/metadata.h
+)
+target_link_libraries(metadata_store RocksDB::rocksdb)
+
 target_include_directories(tm_scheduler PUBLIC ${asio_DIR})
 
 pybind11_add_module(PyTmSched
@@ -46,18 +60,18 @@ pybind11_add_module(PyTmSched
 )
 
 add_library(grpc_client
-        src/task_manager/grpc_client.cpp
+        src/utils/grpc_client.cpp
         src/include/grpc_client.h
 )
 target_link_libraries(grpc_client protolib)
 target_include_directories(grpc_client PUBLIC ${Python_INCLUDE_DIRS})
 
-target_link_libraries(PyTmSched PRIVATE grpc_client)
+target_link_libraries(PyTmSched PRIVATE grpc_client cpr::cpr nlohmann_json::nlohmann_json)
 
 add_executable(control_plane
         src/control_plane/main.cpp
 )
-target_link_libraries(control_plane PUBLIC tm_scheduler grpc_client)
+target_link_libraries(control_plane PUBLIC tm_scheduler grpc_client metadata_store)
 
 add_executable(worker_node src/worker/main.cpp
         src/include/worker.h)
@@ -69,4 +83,4 @@ add_executable(task_manager src/task_manager/main.cpp
         src/task_manager/rr_scheduler.cpp
         src/include/rr_scheduler.h
         src/task_manager/task_manager.cpp)
-target_link_libraries(task_manager tm_scheduler)
+target_link_libraries(task_manager tm_scheduler metadata_store)

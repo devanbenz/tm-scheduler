@@ -1,26 +1,30 @@
 #include "../include/api_server.h"
-#include "../include/task_manager.h"
+#include "../include/metadata.h"
+#include <iostream>
 
 void ApiServer::start(int port) {
-    setup_routes();
+    register_health_routes();
+    register_worker_routes();
     app_.port(port).multithreaded().run();
 }
 
-void ApiServer::setup_routes() {
+void ApiServer::register_worker_routes() {
+    CROW_ROUTE(app_, "/api/v1/insert/worker")
+            .methods("POST"_method)
+                    ([](const crow::request& req) {
+                        auto metadata = MetadataStore<std::string, std::string>();
+                        auto body = crow::json::load(req.body);
+                        if (!body) {
+                            return crow::response(crow::status::BAD_REQUEST);
+                        }
+                        std::string worker_address = body["worker"].s();
+                        metadata.Set("worker", worker_address);
+                        return crow::response(crow::status::OK);
+                    });
+}
+
+void ApiServer::register_health_routes() {
     CROW_ROUTE(app_, "/health")([]() {
         return "I'm okay!";
-    });
-
-    CROW_ROUTE(app_, "/api/v1/submit_task")
-    .methods("POST"_method)
-    ([](const crow::request& req) {
-        auto body = crow::json::load(req.body);
-        if (!body) {
-            return crow::response(crow::status::BAD_REQUEST);
-        }
-        std::string input =  body["bucket"].s();
-        std::string script = body["script"].s();
-
-        return crow::response{};
     });
 }
