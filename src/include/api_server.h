@@ -5,9 +5,14 @@
 class ApiServer {
 public:
     explicit ApiServer(crow::SimpleApp app): app_(app) {};
-    void start(int port);
-private:
-    void setup_routes();
 
+    void start(int port);
+
+    void register_health_routes();
+
+    void register_worker_routes();
+private:
     crow::SimpleApp app_;
 };
+
+

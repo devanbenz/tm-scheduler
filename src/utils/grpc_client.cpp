@@ -15,7 +15,7 @@ int SubmitTask(const std::string& addr) {
     return 0;
 }
 
-std::string SendHealthCheck(const std::string& addr) {
+grpc::Status SendHealthCheck(const std::string& addr) {
     std::mutex mu;
     std::condition_variable cv;
     bool done = false;
@@ -39,11 +39,5 @@ std::string SendHealthCheck(const std::string& addr) {
         cv.wait(lock);
     }
 
-    if (status.ok()) {
-        return res.message();
-    } else {
-        std::cout << status.error_code() << ": " << status.error_message()
-                  << std::endl;
-        return "RPC failed";
-    }
+   return status;
 }
